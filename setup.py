@@ -388,7 +388,17 @@ class build_ext(build_ext_orig):
                     )
                 )
             xmlsec1_tar = self.libs_dir / 'xmlsec1.tar.gz'
-            urlretrieve(url, str(xmlsec1_tar))
+            #urlretrieve(url, str(xmlsec1_tar))
+            req = Request(
+            url,
+            data=None,
+            headers={
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'
+            }
+            )
+            with urlopen(req) as f:
+                with open(xmlsec1_tar, "wb") as fo:
+                    fo.write(f.read())
 
         for file in (openssl_tar, zlib_tar, libiconv_tar, libxml2_tar, libxslt_tar, xmlsec1_tar):
             self.info('Unpacking {}'.format(file.name))
